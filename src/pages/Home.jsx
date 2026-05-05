@@ -1,6 +1,6 @@
 // src/pages/Home.jsx
 import { useEffect, useState } from "react";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import { collection, query, orderBy, limit, getDocs } from "firebase/firestore";
 import { db } from "../firebase/config";
 import { Swiper, SwiperSlide } from "swiper/react";
@@ -9,8 +9,12 @@ import "swiper/css";
 import "swiper/css/pagination";
 import "swiper/css/navigation";
 import ProductCard from "../components/ProductCard";
-import { FaSeedling, FaHandshake, FaSearch } from "react-icons/fa";
-import { useNavigate } from "react-router-dom";
+import {
+  FaSeedling,
+  FaHandshake,
+  FaSearch,
+  FaArrowRight,
+} from "react-icons/fa";
 
 export default function Home() {
   const [productos, setProductos] = useState([]);
@@ -25,50 +29,115 @@ export default function Home() {
         limit(8),
       );
       const snap = await getDocs(q);
-      const data = snap.docs.map((doc) => ({ id: doc.id, ...doc.data() }));
-      setProductos(data);
+      setProductos(snap.docs.map((doc) => ({ id: doc.id, ...doc.data() })));
     }
     cargarProductos();
   }, []);
 
   function handleBuscar(e) {
     e.preventDefault();
-    if (busqueda.trim()) navigate(`/productos?q=${busqueda}`);
+    if (busqueda.trim()) navigate("/productos?q=" + busqueda);
   }
 
   return (
     <div>
       {/* HERO */}
       <section
-        className="relative min-h-[500px] flex items-center justify-center text-white text-center px-4"
+        className="relative min-h-[560px] flex items-center justify-center text-white text-center px-4"
         style={{
-          backgroundImage: `linear-gradient(rgba(0,0,0,0.55), rgba(0,0,0,0.55)),
+          backgroundImage: `linear-gradient(rgba(0,0,0,0.52), rgba(0,0,0,0.52)),
             url('https://images.unsplash.com/photo-1500937386664-56d1dfef3854?w=1400')`,
           backgroundSize: "cover",
           backgroundPosition: "center",
         }}
       >
-        <div className="max-w-2xl">
-          <h1 className="text-4xl md:text-5xl font-bold mb-4 leading-tight">
+        <div className="max-w-2xl fade-up-1">
+          <span
+            style={{
+              display: "inline-block",
+              background: "rgba(133,194,82,0.2)",
+              border: "1px solid rgba(133,194,82,0.5)",
+              color: "#a8d96e",
+              fontSize: "12px",
+              fontWeight: "600",
+              letterSpacing: "0.1em",
+              textTransform: "uppercase",
+              padding: "6px 16px",
+              borderRadius: "20px",
+              marginBottom: "20px",
+            }}
+          >
+            Tipacoque, Boyacá — Directo del campo
+          </span>
+
+          <h1
+            style={{
+              fontFamily: "Fraunces, serif",
+              fontSize: "clamp(36px, 6vw, 60px)",
+              fontWeight: "700",
+              lineHeight: "1.1",
+              marginBottom: "16px",
+            }}
+          >
             Frescura del Campo
             <br />
-            <span className="text-verde-300">a tu Puerta</span>
+            <span style={{ color: "#85c252" }}>a tu Puerta</span>
           </h1>
-          <p className="text-lg text-gray-200 mb-8">
-            Conectamos directamente a los productores locales de Tipacoque con
-            el mundo. Sin intermediarios, precio justo.
+
+          <p
+            style={{
+              fontSize: "16px",
+              color: "#d4d4cc",
+              marginBottom: "32px",
+              lineHeight: "1.6",
+            }}
+          >
+            Conectamos directamente a productores locales de Tipacoque
+            <br />
+            con consumidores. Sin intermediarios, precio justo.
           </p>
-          <form onSubmit={handleBuscar} className="flex gap-2 max-w-lg mx-auto">
+
+          <form
+            onSubmit={handleBuscar}
+            style={{
+              display: "flex",
+              gap: "0",
+              maxWidth: "520px",
+              margin: "0 auto",
+              borderRadius: "50px",
+              overflow: "hidden",
+              boxShadow: "0 4px 24px rgba(0,0,0,0.3)",
+            }}
+          >
             <input
               type="text"
               placeholder="Busca papa, duraznos, fresas..."
               value={busqueda}
               onChange={(e) => setBusqueda(e.target.value)}
-              className="flex-1 px-4 py-3 rounded-l-full text-gray-800 text-sm outline-none"
+              style={{
+                flex: 1,
+                padding: "14px 20px",
+                border: "none",
+                outline: "none",
+                fontSize: "14px",
+                color: "#1C1C1A",
+                background: "white",
+              }}
             />
             <button
               type="submit"
-              className="bg-verde-600 hover:bg-verde-700 px-6 py-3 rounded-r-full font-semibold flex items-center gap-2 transition"
+              style={{
+                background: "#2D5A1B",
+                color: "white",
+                border: "none",
+                padding: "14px 24px",
+                fontSize: "14px",
+                fontWeight: "600",
+                cursor: "pointer",
+                display: "flex",
+                alignItems: "center",
+                gap: "8px",
+              }}
             >
               <FaSearch /> Buscar
             </button>
@@ -76,29 +145,74 @@ export default function Home() {
         </div>
       </section>
 
-      {/* CARRUSEL DE PRODUCTOS */}
-      <section className="max-w-6xl mx-auto px-4 py-12">
-        <div className="flex items-center justify-between mb-6">
-          <h2 className="text-2xl font-bold text-gray-800">
-            🌿 Productos recientes del campo
-          </h2>
+      {/* CARRUSEL */}
+      <section className="max-w-6xl mx-auto px-4 py-14">
+        <div
+          style={{
+            display: "flex",
+            alignItems: "flex-end",
+            justifyContent: "space-between",
+            marginBottom: "32px",
+          }}
+        >
+          <div>
+            <h2
+              style={{
+                fontFamily: "Fraunces, serif",
+                fontSize: "28px",
+                fontWeight: "700",
+                color: "#1C1C1A",
+                marginBottom: "6px",
+              }}
+            >
+              Productos recientes del campo
+            </h2>
+            <div
+              style={{
+                width: "48px",
+                height: "3px",
+                background: "#2D5A1B",
+                borderRadius: "2px",
+              }}
+            />
+          </div>
           <Link
             to="/productos"
-            className="text-verde-700 hover:text-verde-800 text-sm font-medium"
+            style={{
+              display: "flex",
+              alignItems: "center",
+              gap: "6px",
+              color: "#2D5A1B",
+              fontWeight: "600",
+              fontSize: "14px",
+              textDecoration: "none",
+            }}
           >
-            Ver todos →
+            Ver todos <FaArrowRight style={{ fontSize: "12px" }} />
           </Link>
         </div>
 
         {productos.length === 0 ? (
-          <div className="text-center py-12 text-gray-400">
-            <FaSeedling className="text-5xl mx-auto mb-3 text-verde-300" />
-            <p>Aún no hay productos publicados.</p>
+          <div
+            style={{ textAlign: "center", padding: "60px 0", color: "#9a9a90" }}
+          >
+            <FaSeedling
+              style={{
+                fontSize: "48px",
+                color: "#c8dbb8",
+                marginBottom: "12px",
+                display: "block",
+                margin: "0 auto 12px",
+              }}
+            />
+            <p style={{ fontSize: "16px", marginBottom: "8px" }}>
+              Aún no hay productos publicados
+            </p>
             <Link
               to="/registro"
-              className="text-verde-600 font-medium mt-2 inline-block"
+              style={{ color: "#2D5A1B", fontWeight: "600" }}
             >
-              ¡Sé el primero en publicar!
+              Sé el primero en publicar
             </Link>
           </div>
         ) : (
@@ -113,7 +227,7 @@ export default function Home() {
             autoplay={{ delay: 3500, disableOnInteraction: false }}
             pagination={{ clickable: true }}
             navigation
-            className="pb-10"
+            className="pb-12"
           >
             {productos.map((p) => (
               <SwiperSlide key={p.id}>
@@ -125,26 +239,97 @@ export default function Home() {
       </section>
 
       {/* CATEGORÍAS */}
-      <section className="bg-verde-50 py-10">
+      <section style={{ background: "#EDE8DC", padding: "60px 0" }}>
         <div className="max-w-6xl mx-auto px-4">
-          <h2 className="text-2xl font-bold text-gray-800 mb-6 text-center">
+          <h2
+            style={{
+              fontFamily: "Fraunces, serif",
+              fontSize: "28px",
+              fontWeight: "700",
+              color: "#1C1C1A",
+              textAlign: "center",
+              marginBottom: "8px",
+            }}
+          >
             Explora por categoría
           </h2>
-          <div className="grid grid-cols-2 md:grid-cols-5 gap-4">
+          <p
+            style={{
+              textAlign: "center",
+              color: "#6b6b63",
+              fontSize: "14px",
+              marginBottom: "32px",
+            }}
+          >
+            Encuentra exactamente lo que buscas
+          </p>
+          <div
+            style={{
+              display: "grid",
+              gridTemplateColumns: "repeat(auto-fit, minmax(130px, 1fr))",
+              gap: "14px",
+            }}
+          >
             {[
-              { nombre: "Frutas", emoji: "🍑", slug: "frutas" },
-              { nombre: "Verduras", emoji: "🥦", slug: "verduras" },
-              { nombre: "Granos", emoji: "🌽", slug: "granos" },
-              { nombre: "Lácteos", emoji: "🥛", slug: "lacteos" },
-              { nombre: "Otros", emoji: "🌿", slug: "otros" },
+              {
+                nombre: "Frutas",
+                emoji: "🍑",
+                slug: "frutas",
+                color: "#fff3e0",
+              },
+              {
+                nombre: "Verduras",
+                emoji: "🥦",
+                slug: "verduras",
+                color: "#ecfdf5",
+              },
+              {
+                nombre: "Granos",
+                emoji: "🌽",
+                slug: "granos",
+                color: "#fefce8",
+              },
+              {
+                nombre: "Lácteos",
+                emoji: "🥛",
+                slug: "lacteos",
+                color: "#eff6ff",
+              },
+              { nombre: "Otros", emoji: "🌿", slug: "otros", color: "#f5f5f4" },
             ].map((cat) => (
               <Link
                 key={cat.slug}
-                to={`/productos?categoria=${cat.slug}`}
-                className="bg-white rounded-xl p-4 text-center shadow hover:shadow-md hover:-translate-y-1 transition-all"
+                to={"/productos?categoria=" + cat.slug}
+                style={{
+                  background: cat.color,
+                  borderRadius: "14px",
+                  padding: "20px 12px",
+                  textAlign: "center",
+                  textDecoration: "none",
+                  border: "1px solid rgba(0,0,0,0.06)",
+                  transition: "transform 0.2s ease, box-shadow 0.2s ease",
+                  display: "block",
+                }}
+                onMouseEnter={(e) => {
+                  e.currentTarget.style.transform = "translateY(-4px)";
+                  e.currentTarget.style.boxShadow =
+                    "0 8px 24px rgba(0,0,0,0.1)";
+                }}
+                onMouseLeave={(e) => {
+                  e.currentTarget.style.transform = "translateY(0)";
+                  e.currentTarget.style.boxShadow = "none";
+                }}
               >
-                <div className="text-3xl mb-2">{cat.emoji}</div>
-                <div className="text-sm font-medium text-gray-700">
+                <div style={{ fontSize: "32px", marginBottom: "8px" }}>
+                  {cat.emoji}
+                </div>
+                <div
+                  style={{
+                    fontSize: "13px",
+                    fontWeight: "600",
+                    color: "#1C1C1A",
+                  }}
+                >
                   {cat.nombre}
                 </div>
               </Link>
@@ -155,36 +340,114 @@ export default function Home() {
 
       {/* CÓMO FUNCIONA */}
       <section className="max-w-6xl mx-auto px-4 py-14">
-        <h2 className="text-2xl font-bold text-gray-800 mb-10 text-center">
-          ¿Cómo funciona AgroMarket?
+        <h2
+          style={{
+            fontFamily: "Fraunces, serif",
+            fontSize: "28px",
+            fontWeight: "700",
+            color: "#1C1C1A",
+            textAlign: "center",
+            marginBottom: "8px",
+          }}
+        >
+          Cómo funciona AgroMarket
         </h2>
-        <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
+        <p
+          style={{
+            textAlign: "center",
+            color: "#6b6b63",
+            fontSize: "14px",
+            marginBottom: "40px",
+          }}
+        >
+          Simple, directo y sin intermediarios
+        </p>
+        <div
+          style={{
+            display: "grid",
+            gridTemplateColumns: "repeat(auto-fit, minmax(220px, 1fr))",
+            gap: "20px",
+          }}
+        >
           {[
             {
-              icon: <FaSeedling className="text-3xl text-verde-600" />,
+              icon: <FaSeedling />,
+              num: "01",
               titulo: "El productor publica",
               desc: "El campesino sube su producto con foto, precio y datos de contacto directo.",
             },
             {
-              icon: <FaSearch className="text-3xl text-verde-600" />,
+              icon: <FaSearch />,
+              num: "02",
               titulo: "El consumidor busca",
-              desc: "Cualquier persona puede explorar los productos disponibles sin crear cuenta.",
+              desc: "Cualquier persona explora los productos disponibles sin necesidad de cuenta.",
             },
             {
-              icon: <FaHandshake className="text-3xl text-verde-600" />,
+              icon: <FaHandshake />,
+              num: "03",
               titulo: "Contacto directo",
-              desc: "El comprador contacta al productor por WhatsApp y acuerdan la entrega. Sin intermediarios.",
+              desc: "El comprador contacta al productor por WhatsApp y acuerdan la entrega.",
             },
           ].map((item, i) => (
             <div
               key={i}
-              className="text-center p-6 bg-white rounded-xl shadow-sm hover:shadow-md transition"
+              style={{
+                background: "white",
+                borderRadius: "16px",
+                padding: "28px 24px",
+                border: "1px solid #e8e4da",
+                position: "relative",
+                overflow: "hidden",
+              }}
             >
-              <div className="flex justify-center mb-4">{item.icon}</div>
-              <h3 className="font-semibold text-gray-800 mb-2">
+              <div
+                style={{
+                  position: "absolute",
+                  top: "20px",
+                  right: "20px",
+                  fontFamily: "Fraunces, serif",
+                  fontSize: "48px",
+                  fontWeight: "700",
+                  color: "#f0ede6",
+                  lineHeight: "1",
+                }}
+              >
+                {item.num}
+              </div>
+              <div
+                style={{
+                  width: "44px",
+                  height: "44px",
+                  borderRadius: "12px",
+                  background: "#f0f7eb",
+                  display: "flex",
+                  alignItems: "center",
+                  justifyContent: "center",
+                  color: "#2D5A1B",
+                  fontSize: "20px",
+                  marginBottom: "16px",
+                }}
+              >
+                {item.icon}
+              </div>
+              <h3
+                style={{
+                  fontFamily: "Fraunces, serif",
+                  fontSize: "18px",
+                  fontWeight: "600",
+                  color: "#1C1C1A",
+                  marginBottom: "8px",
+                }}
+              >
                 {item.titulo}
               </h3>
-              <p className="text-sm text-gray-500 leading-relaxed">
+              <p
+                style={{
+                  fontSize: "13px",
+                  color: "#6b6b63",
+                  lineHeight: "1.6",
+                }}
+              >
                 {item.desc}
               </p>
             </div>
@@ -192,20 +455,62 @@ export default function Home() {
         </div>
       </section>
 
-      {/* BANNER LLAMADO A ACCIÓN */}
-      <section className="bg-verde-800 text-white py-12 text-center px-4">
-        <h2 className="text-2xl font-bold mb-3">
+      {/* BANNER CTA */}
+      <section
+        style={{
+          background:
+            "linear-gradient(135deg, #1e3d12 0%, #2D5A1B 50%, #3d7a28 100%)",
+          padding: "60px 20px",
+          textAlign: "center",
+        }}
+      >
+        <h2
+          style={{
+            fontFamily: "Fraunces, serif",
+            fontSize: "32px",
+            fontWeight: "700",
+            color: "white",
+            marginBottom: "12px",
+          }}
+        >
           ¿Eres productor de Tipacoque?
         </h2>
-        <p className="text-gray-200 mb-6 max-w-lg mx-auto text-sm">
+        <p
+          style={{
+            color: "#a8d96e",
+            fontSize: "15px",
+            marginBottom: "28px",
+            maxWidth: "480px",
+            margin: "0 auto 28px",
+          }}
+        >
           Regístrate gratis y empieza a vender tus productos directamente a
           consumidores locales. Tú pones el precio.
         </p>
         <Link
           to="/registro"
-          className="bg-white text-verde-800 font-bold px-8 py-3 rounded-full hover:bg-verde-50 transition"
+          style={{
+            display: "inline-flex",
+            alignItems: "center",
+            gap: "8px",
+            background: "white",
+            color: "#2D5A1B",
+            fontWeight: "700",
+            fontSize: "15px",
+            padding: "14px 32px",
+            borderRadius: "50px",
+            textDecoration: "none",
+            boxShadow: "0 4px 20px rgba(0,0,0,0.2)",
+            transition: "transform 0.2s ease",
+          }}
+          onMouseEnter={(e) =>
+            (e.currentTarget.style.transform = "translateY(-2px)")
+          }
+          onMouseLeave={(e) =>
+            (e.currentTarget.style.transform = "translateY(0)")
+          }
         >
-          Registrarme como productor
+          Registrarme como productor <FaArrowRight />
         </Link>
       </section>
     </div>

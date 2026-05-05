@@ -17,6 +17,7 @@ export default function Login() {
     "auth/user-not-found": "No existe una cuenta con ese correo.",
     "auth/wrong-password": "Contraseña incorrecta.",
     "auth/invalid-email": "El correo no es válido.",
+    "auth/invalid-credential": "Correo o contraseña incorrectos.",
     "auth/too-many-requests": "Demasiados intentos. Intenta más tarde.",
   };
 
@@ -28,35 +29,97 @@ export default function Login() {
       await login(email, password);
       navigate("/dashboard");
     } catch (err) {
-      setError(
-        errores[err.code] || "Error al iniciar sesión. Intenta de nuevo.",
-      );
+      setError(errores[err.code] || "Error al iniciar sesión.");
     }
     setCargando(false);
   }
 
   return (
-    <div className="min-h-screen flex items-center justify-center bg-green-50 px-4">
-      <div className="bg-white rounded-2xl shadow-lg p-8 w-full max-w-md">
-        <div className="text-center mb-6">
-          <FaLeaf className="text-verde-600 text-4xl mx-auto mb-2" />
-          <h2 className="text-2xl font-bold text-gray-800">
+    <div
+      style={{
+        minHeight: "100vh",
+        display: "flex",
+        alignItems: "center",
+        justifyContent: "center",
+        background: "#F5F2EB",
+        padding: "20px",
+      }}
+    >
+      <div
+        style={{
+          background: "white",
+          borderRadius: "20px",
+          padding: "40px 36px",
+          width: "100%",
+          maxWidth: "420px",
+          boxShadow: "0 4px 32px rgba(0,0,0,0.08)",
+          border: "1px solid #e8e4da",
+        }}
+      >
+        {/* Header */}
+        <div style={{ textAlign: "center", marginBottom: "28px" }}>
+          <div
+            style={{
+              width: "52px",
+              height: "52px",
+              borderRadius: "14px",
+              background: "#2D5A1B",
+              display: "flex",
+              alignItems: "center",
+              justifyContent: "center",
+              margin: "0 auto 16px",
+            }}
+          >
+            <FaLeaf style={{ color: "white", fontSize: "22px" }} />
+          </div>
+          <h2
+            style={{
+              fontFamily: "Fraunces, serif",
+              fontSize: "26px",
+              fontWeight: "700",
+              color: "#1C1C1A",
+              marginBottom: "6px",
+            }}
+          >
             Bienvenido de vuelta
           </h2>
-          <p className="text-gray-500 text-sm mt-1">
+          <p style={{ fontSize: "14px", color: "#6b6b63" }}>
             Ingresa a tu cuenta de AgroMarket
           </p>
         </div>
 
+        {/* Error */}
         {error && (
-          <div className="bg-red-50 text-red-700 border border-red-200 rounded-lg px-4 py-3 text-sm mb-4">
+          <div
+            style={{
+              background: "#fff5f5",
+              border: "1px solid #fecaca",
+              borderRadius: "10px",
+              padding: "12px 16px",
+              fontSize: "13px",
+              color: "#dc2626",
+              marginBottom: "20px",
+            }}
+          >
             {error}
           </div>
         )}
 
-        <form onSubmit={handleSubmit} className="flex flex-col gap-4">
+        {/* Formulario */}
+        <form
+          onSubmit={handleSubmit}
+          style={{ display: "flex", flexDirection: "column", gap: "16px" }}
+        >
           <div>
-            <label className="text-sm font-medium text-gray-700 mb-1 block">
+            <label
+              style={{
+                fontSize: "13px",
+                fontWeight: "600",
+                color: "#1C1C1A",
+                display: "block",
+                marginBottom: "6px",
+              }}
+            >
               Correo electrónico
             </label>
             <input
@@ -65,27 +128,71 @@ export default function Login() {
               value={email}
               onChange={(e) => setEmail(e.target.value)}
               placeholder="tucorreo@email.com"
-              className="w-full border border-gray-300 rounded-lg px-4 py-2.5 text-sm outline-none focus:border-verde-500 focus:ring-1 focus:ring-verde-500"
+              style={{
+                width: "100%",
+                padding: "11px 14px",
+                border: "1.5px solid #e8e4da",
+                borderRadius: "10px",
+                fontSize: "14px",
+                color: "#1C1C1A",
+                outline: "none",
+                background: "white",
+                transition: "border-color 0.2s",
+                boxSizing: "border-box",
+              }}
+              onFocus={(e) => (e.target.style.borderColor = "#2D5A1B")}
+              onBlur={(e) => (e.target.style.borderColor = "#e8e4da")}
             />
           </div>
 
           <div>
-            <label className="text-sm font-medium text-gray-700 mb-1 block">
+            <label
+              style={{
+                fontSize: "13px",
+                fontWeight: "600",
+                color: "#1C1C1A",
+                display: "block",
+                marginBottom: "6px",
+              }}
+            >
               Contraseña
             </label>
-            <div className="relative">
+            <div style={{ position: "relative" }}>
               <input
                 type={verPass ? "text" : "password"}
                 required
                 value={password}
                 onChange={(e) => setPassword(e.target.value)}
                 placeholder="Tu contraseña"
-                className="w-full border border-gray-300 rounded-lg px-4 py-2.5 text-sm outline-none focus:border-verde-500 focus:ring-1 focus:ring-verde-500 pr-10"
+                style={{
+                  width: "100%",
+                  padding: "11px 40px 11px 14px",
+                  border: "1.5px solid #e8e4da",
+                  borderRadius: "10px",
+                  fontSize: "14px",
+                  color: "#1C1C1A",
+                  outline: "none",
+                  background: "white",
+                  transition: "border-color 0.2s",
+                  boxSizing: "border-box",
+                }}
+                onFocus={(e) => (e.target.style.borderColor = "#2D5A1B")}
+                onBlur={(e) => (e.target.style.borderColor = "#e8e4da")}
               />
               <button
                 type="button"
                 onClick={() => setVerPass(!verPass)}
-                className="absolute right-3 top-1/2 -translate-y-1/2 text-gray-400 hover:text-gray-600"
+                style={{
+                  position: "absolute",
+                  right: "12px",
+                  top: "50%",
+                  transform: "translateY(-50%)",
+                  background: "none",
+                  border: "none",
+                  color: "#9a9a90",
+                  cursor: "pointer",
+                  fontSize: "15px",
+                }}
               >
                 {verPass ? <FaEyeSlash /> : <FaEye />}
               </button>
@@ -95,17 +202,39 @@ export default function Login() {
           <button
             type="submit"
             disabled={cargando}
-            className="bg-verde-600 hover:bg-verde-700 disabled:opacity-60 text-white font-semibold py-2.5 rounded-lg transition mt-2"
+            style={{
+              background: cargando ? "#6b9e52" : "#2D5A1B",
+              color: "white",
+              border: "none",
+              padding: "13px",
+              borderRadius: "10px",
+              fontSize: "15px",
+              fontWeight: "700",
+              cursor: cargando ? "not-allowed" : "pointer",
+              transition: "background 0.2s",
+              marginTop: "4px",
+            }}
           >
             {cargando ? "Ingresando..." : "Iniciar sesión"}
           </button>
         </form>
 
-        <p className="text-center text-sm text-gray-500 mt-5">
+        <p
+          style={{
+            textAlign: "center",
+            fontSize: "13px",
+            color: "#6b6b63",
+            marginTop: "20px",
+          }}
+        >
           ¿No tienes cuenta?{" "}
           <Link
             to="/registro"
-            className="text-verde-700 font-medium hover:underline"
+            style={{
+              color: "#2D5A1B",
+              fontWeight: "700",
+              textDecoration: "none",
+            }}
           >
             Regístrate aquí
           </Link>
