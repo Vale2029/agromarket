@@ -220,7 +220,19 @@ export default function Registro() {
           <button
             type="submit"
             disabled={cargando}
-            className="bg-verde-600 hover:bg-verde-700 disabled:opacity-60 text-white font-semibold py-2.5 rounded-lg transition mt-1"
+            style={{
+              width: "100%",
+              background: cargando ? "#6b9e52" : "#2D5A1B",
+              color: "white",
+              border: "none",
+              padding: "13px",
+              borderRadius: "10px",
+              fontSize: "15px",
+              fontWeight: "700",
+              cursor: cargando ? "not-allowed" : "pointer",
+              marginTop: "8px",
+              boxShadow: "0 4px 14px rgba(45, 90, 27, 0.4)",
+            }}
           >
             {cargando ? "Creando cuenta..." : "Crear cuenta gratis"}
           </button>
